@@ -1,0 +1,69 @@
+<div>
+
+  <md-content>
+    <header>
+      <acme-navbar creation-date="main.creationDate"></acme-navbar>
+    </header>
+
+    <section class="jumbotron">
+      <div class="app-logo" ng-if="!main.companyDetails"></div>
+      <div class="app-description" ng-if="!main.companyDetails">Search for by your favourite company name to find the stock details...</div>
+      <div class="company-search">
+        <md-autocomplete
+          ng-disabled="main.isDisabled"
+          md-no-cache="main.noCache"
+          md-selected-item="main.selectedItem"
+          md-search-text-change="main.searchTextChange(main.searchText)"
+          md-search-text="main.searchText"
+          md-selected-item-change="main.selectedItemChange(item)"
+          md-items="item in main.querySearch(main.searchText)"
+          md-item-text="item.name"
+          md-min-length="1"
+          placeholder="Enter a company name...">
+          <md-item-template>
+            <span md-highlight-text="main.searchText" md-highlight-flags="^i">{{item.name}}</span>
+          </md-item-template>
+          <md-not-found>
+            No companies matching "{{main.searchText}}" were found.
+          </md-not-found>
+        </md-autocomplete>
+      </div>
+    </section>
+
+    <div class="details-main" ng-if="main.companyDetails && main.companyStocks">
+      <div class="company-details" layout-align="center">
+        <md-card>
+          <md-card-title>
+            <md-card-title-text>
+              <span class="md-headline">{{main.companyDetails.name}}</span>
+              <span class="md-subhead">{{main.companyDetails.description}}</span>
+            </md-card-title-text>
+            <md-card-title-media>
+              <div class="md-media-sm company-logo"
+                   ng-style="{'background-image': 'url(' + main.companyDetails.logoUrl + ')'}"></div>
+            </md-card-title-media>
+          </md-card-title>
+        </md-card>
+      </div>
+
+      <div class="stock-details" layout-align="center">
+        <md-card>
+          <md-card-title>
+            <md-card-title-text>
+              <span class="md-headline">{{main.companyStocks.stockSymbol}}</span>
+              <span class="md-subhead">{{main.companyStocks.currentStockValue}}</span>
+            </md-card-title-text>
+            <md-card-title-media>
+              <div></div>
+            </md-card-title-media>
+          </md-card-title>
+        </md-card>
+        <div class="graph-container">
+          <div class="graph-title">Stock trends of last 5 days</div>
+          <c3-simple id="chart" config="main.trendingChart"></c3-simple>
+        </div>
+      </div>
+    </div>
+  </md-content>
+
+</div>
